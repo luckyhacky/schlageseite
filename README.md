@@ -11,3 +11,7 @@ usage:
   
 *hint: "Schlagseite" is german. 
 "beat the page" is directly translated, which is no correct but I like it because it has double meaning.*
+
+
+
+Alternate version is available on branch "schlagseite" provided by Thomas Ochs - thanks for contribution
