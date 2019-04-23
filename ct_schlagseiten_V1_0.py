@@ -64,7 +64,7 @@ print("Version 1.0 vom 13.04.2019")
 print("============================================================================")
 anzahl_parameter = len(sys.argv)
 jahrgang_start = "1993"
-#print("Anzahl der Übergabeparameter", anzahl_parameter)
+
 print("")
 if(anzahl_parameter == 1):
 	jangang_start = "1993"
@@ -100,7 +100,7 @@ print("***********")
 print("* Phase 2 * (Durchsuche Indexseiten nach vorhanden Jahrgängen)")
 print("***********")
 print("");
-#print("hole Index-Seite 1")
+
 if(jahrgang_start == "1993"):
 	suchanfrage = "https://www.heise.de/ct/entdecken/?hauptrubrik=%40ctmagazin&unterrubrik=Schlagseite"
 	suchanfrage_urls = "/ct/ausgabe/(.*).html\" title=\"(.*)\""
@@ -109,14 +109,13 @@ else:
 	suchanfrage = "https://www.heise.de/ct/entdecken/?hauptrubrik=%40ctmagazin&unterrubrik=Schlagseite&dmin=01-12-" + str(int(jahrgang_start)-1) + "&dmax=31-12-"+ jahrgang_start + "&sort=datum_ab"
 	suchanfrage_urls = "/ct/ausgabe/(.*).html\" title=\"(.*)\""
 	suchanfrage_pages = "/ct/entdecken/\?hauptrubrik=%40ctmagazin&unterrubrik=Schlagseite&dmin=01-12-" + str(int(jahrgang_start)-1) + "&dmax=31-12-"+ jahrgang_start + "&sort=datum_ab&seite=(.*)\" "
-#print("Request: ",suchanfrage)
+
 r     = requests.get(suchanfrage)
 urls  = re.findall(suchanfrage_urls, r.text)
 pages = re.findall(suchanfrage_pages, r.text)
-#print("gefundene URLs: ",urls)
-#print("Index-Seiten: ",pages)
+
 laenge_seitenliste = len(pages)
-#print("Länge der Seitenliste",laenge_seitenliste)
+
 # download rest of the Schlagseite overview pages
 if(laenge_seitenliste == 0):
 	max_page = int(1)
@@ -140,7 +139,7 @@ for x in urls:
 		if(len(edition_str[1]) < 2):
 			edition_str[1] = "0" + edition_str[1]
 		url_list[edition_str[0] + "-" + edition_str[1]] = "https://www.heise.de/ct/ausgabe/" + x[0] + ".html"
-		# print("URL (einzeln): ", edition_str[0], edition_str[1])
+
 	elif(x[0] == "2015-14-c-t-2683362" and x[1] == "c't"):
 		# wrong naming by heise but we accept it
 		edition_str = str.split(x[0], "-")
@@ -149,9 +148,6 @@ for x in urls:
 		print(x[1])
 		print("??? unknown link detected >> " + str(x[0]) + " | " + str(x[1]))
 print(len(url_list),"gefundene Bild-Einräge auf",max_page,"Indexseite")
-#exit()
-
-# print("URL-Liste:", url_list)
 
 # do the actual download of images and pdfs
 print("")
@@ -163,10 +159,7 @@ gefundenes_bild = 0
 durchsuchte_url = 0
 for elem in url_list:
 	r_sub   = requests.get(url_list[elem]);
-	#print("Element/Bild: ", elem)
 	elem_gespalten_str = str.split(elem, "-")
-	#print("Element 0: ", elem_gespalten_str[0])
-	#print("Element 1: ", elem_gespalten_str[1])
 	if(elem_gespalten_str[0] == jahrgang_start or jahrgang_start == "1993"):
 		# Umstellung der URL von /ct/zcontent/ auf /select/ct/
 		# mit Ausgabe: 2016
@@ -177,7 +170,6 @@ for elem in url_list:
 			img_url = "https://www.heise.de/ct/zcontent/" + img[0] + ".jpg";
 		else:
 			img     = re.findall("<a href=\"/select/ct/(.*).jpg\"", r_sub.text)
-			# print("Bildname: ", img)
 			img_url = "https://www.heise.de/select/ct/" + img[0] + ".jpg"
 		print("Ausgabe: ", elem_gespalten_str[0],"-",elem_gespalten_str[1]," Bildname: ", img_url)
 		print("Bild wird geladen")
