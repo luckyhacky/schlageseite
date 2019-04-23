@@ -102,8 +102,14 @@ print("downloading ...")
 for elem in url_list:
     r_sub   = requests.get(url_list[elem]);
     img     = re.findall("/ct/zcontent/(.*).jpg\" class", r_sub.text)
-    img_url = "https://www.heise.de/ct/zcontent/" + img[0] + ".jpg"
-    
+    img_alt = re.findall("<a href=\"/select/ct/(.*).jpg\"", r_sub.text)
+
+    if isinstance(img, list) and img:
+        img_url = "https://www.heise.de/ct/zcontent/" + img[0] + ".jpg"
+    else:
+        img = img_alt
+        img_url = "https://www.heise.de/select/ct/" + img[0] + ".jpg"
+
     r_img = requests.get(img_url);
     if(r_img.status_code == 200):
         img_file = "./img/" + elem + "-" + os.path.basename(img_url)
